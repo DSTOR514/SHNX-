@@ -6,12 +6,11 @@
     <title>SHNX Movies</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* إعدادات الصفحة الأساسية */
         :root {
             --bg-color: #141414;
             --card-bg: #1f1f1f;
             --text-color: #ffffff;
-            --accent-color: #e50914; /* لون أحمر نتفلكس */
+            --accent-color: #e50914;
         }
 
         body {
@@ -21,188 +20,140 @@
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            padding-bottom: 50px;
         }
 
-        /* الرأس (Header) */
-        header {
-            padding: 15px;
+        /* تنسيق المشغل (النافذة المنبثقة) */
+        #video-player-modal {
+            display: none; /* مخفي افتراضياً */
             position: fixed;
             top: 0;
-            width: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        /* البانر الرئيسي (Hero Section) */
-        .hero {
-            height: 60vh;
-            background-image: url('https://placehold.co/600x800/222/fff?text=Poster+Ramadan');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, var(--bg-color), transparent);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .hero-title {
-            font-size: 32px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .btn-play {
-            background-color: var(--text-color);
-            color: black;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        /* أقسام المسلسلات (Categories) */
-        .category-title {
-            font-size: 18px;
-            margin: 20px 20px 10px;
-            font-weight: 600;
-        }
-
-        .scroll-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 0 20px 20px;
-            gap: 10px;
-            scrollbar-width: none; /* إخفاء شريط التمرير */
-        }
-
-        .scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .movie-card {
-            min-width: 110px;
-            height: 160px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .movie-card img {
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background-color: black;
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .movie-card:active {
-            transform: scale(0.95);
+        #video-frame {
+            width: 100%;
+            height: 50vh; /* نصف الشاشة */
+            border: none;
         }
 
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* باقي التنسيقات السابقة */
+        header {
+            padding: 15px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            top: 0;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent-color); }
+        
+        .hero {
+            height: 50vh;
+            background-image: url('https://placehold.co/600x800/222/fff?text=Ramadan+Kareem');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, var(--bg-color), transparent);
+        }
+        .hero-content { position: relative; z-index: 2; padding: 20px; width: 100%; }
+        .btn-play {
+            background-color: white; color: black; border: none;
+            padding: 10px 25px; border-radius: 4px; font-weight: bold;
+            cursor: pointer;
+        }
+
+        .category-title { font-size: 18px; margin: 20px 20px 10px; font-weight: 600; }
+        .scroll-container {
+            display: flex; overflow-x: auto; padding: 0 20px; gap: 10px;
+            scrollbar-width: none;
+        }
+        .movie-card {
+            min-width: 110px; height: 160px; background-color: var(--card-bg);
+            border-radius: 8px; overflow: hidden; flex-shrink: 0;
+        }
+        .movie-card img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
+    <div id="video-player-modal">
+        <button class="close-btn" onclick="closeVideo()">❌ إغلاق</button>
+        <iframe id="video-frame" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" allowfullscreen></iframe>
+        <div style="padding: 20px; text-align: center;">
+            <h3>جارِ المشاهدة...</h3>
+            <p style="color: #aaa; font-size: 14px;">يتم البث عبر سيرفرات خاصة</p>
+        </div>
+    </div>
+
     <header>
         <div class="logo">SHNX</div>
-        <div id="user-greeting" style="font-size: 12px; opacity: 0.8;"></div>
     </header>
 
     <div class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">جعفر العمدة 2</h1>
-            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 15px;">دراما • إثارة • رمضان 2026</p>
-            <button class="btn-play" onclick="playMovie('جعفر العمدة 2')">
-                ▶ مشاهدة الآن
+            <h1>مسلسل أسامة الحصري</h1>
+            <p>رمضان 2026 • دراما</p>
+            <button class="btn-play" onclick="playMovie('https://vk.com/video_ext.php?oid=791768803&id=456260752&hd=2')">
+                ▶ مشاهدة الحلقة
             </button>
         </div>
     </div>
 
-    <div class="category-title">مسلسلات رمضان 2026 🔥</div>
+    <div class="category-title">جديد رمضان</div>
     <div class="scroll-container">
-        <div class="movie-card" onclick="playMovie('شباب البومب 14')">
-            <img src="https://placehold.co/200x300/333/fff?text=Shabab+14" alt="Movie">
+        <div class="movie-card" onclick="playMovie('https://vk.com/video_ext.php?oid=791768803&id=456260752&hd=2')">
+            <img src="https://placehold.co/200x300?text=Ep+1" alt="Ep1">
         </div>
-        <div class="movie-card" onclick="playMovie('طاش ما طاش')">
-            <img src="https://placehold.co/200x300/444/fff?text=Tash" alt="Movie">
-        </div>
-        <div class="movie-card" onclick="playMovie('المداح 6')">
-            <img src="https://placehold.co/200x300/555/fff?text=Maddah" alt="Movie">
-        </div>
-         <div class="movie-card" onclick="playMovie('الكبير أوي')">
-            <img src="https://placehold.co/200x300/666/fff?text=Alkabeer" alt="Movie">
+        <div class="movie-card" onclick="playMovie('RABET_VIDEO_2')">
+            <img src="https://placehold.co/200x300?text=Ep+2" alt="Ep2">
         </div>
     </div>
-
-    <div class="category-title">الأكثر مشاهدة 📈</div>
-    <div class="scroll-container">
-        <div class="movie-card" onclick="playMovie('فيلم أكشن')">
-            <img src="https://placehold.co/200x300/777/fff?text=Action" alt="Movie">
-        </div>
-        <div class="movie-card" onclick="playMovie('فيلم رعب')">
-            <img src="https://placehold.co/200x300/888/fff?text=Horror" alt="Movie">
-        </div>
-         <div class="movie-card" onclick="playMovie('انمي')">
-            <img src="https://placehold.co/200x300/999/fff?text=Anime" alt="Movie">
-        </div>
-    </div>
-    
-    <br><br><br>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); 
-        
-        // تغيير ألوان التطبيق لتناسب نظام المستخدم (Dark/Light)
-        // لكننا ثبتنا الوضع الداكن لأنه أفضل للأفلام
-        tg.setHeaderColor('#141414'); 
-        tg.setBackgroundColor('#141414');
+        tg.expand();
 
-        // إظهار اسم المستخدم
-        if (tg.initDataUnsafe.user) {
-            document.getElementById('user-greeting').innerText = "أهلاً " + tg.initDataUnsafe.user.first_name;
+        // دالة تشغيل الفيديو
+        function playMovie(link) {
+            let modal = document.getElementById('video-player-modal');
+            let frame = document.getElementById('video-frame');
+            
+            frame.src = link; // وضع الرابط داخل المشغل
+            modal.style.display = 'flex'; // إظهار النافذة
         }
 
-        // دالة مؤقتة عند الضغط على فيلم
-        function playMovie(name) {
-            // هنا سنضع كود التشغيل لاحقاً
-            // حالياً سيظهر نافذة منبثقة فقط
-            tg.showPopup({
-                title: "تشغيل",
-                message: "هل تريد مشاهدة " + name + "؟ (سيتم تفعيل الميزة في الدرس القادم)",
-                buttons: [{type: "ok", text: "نعم"}]
-            });
+        // دالة إغلاق الفيديو
+        function closeVideo() {
+            let modal = document.getElementById('video-player-modal');
+            let frame = document.getElementById('video-frame');
+            
+            frame.src = ""; // إيقاف الفيديو
+            modal.style.display = 'none'; // إخفاء النافذة
         }
     </script>
 </body>
