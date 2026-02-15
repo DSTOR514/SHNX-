@@ -6,154 +6,53 @@
     <title>SHNX Movies</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: #141414;
-            --card-bg: #1f1f1f;
-            --text-color: #ffffff;
-            --accent-color: #e50914;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            padding-bottom: 50px;
-        }
-
-        /* تنسيق المشغل (النافذة المنبثقة) */
-        #video-player-modal {
-            display: none; /* مخفي افتراضياً */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            z-index: 1000;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #video-frame {
-            width: 100%;
-            height: 50vh; /* نصف الشاشة */
-            border: none;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        /* باقي التنسيقات السابقة */
-        header {
-            padding: 15px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-            top: 0;
-        }
-        .logo { font-size: 24px; font-weight: bold; color: var(--accent-color); }
-        
-        .hero {
-            height: 50vh;
-            background-image: url('https://placehold.co/600x800/222/fff?text=Ramadan+Kareem');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
-            position: relative;
-        }
-        .hero::after {
-            content: ''; position: absolute; bottom: 0; width: 100%; height: 50%;
-            background: linear-gradient(to top, var(--bg-color), transparent);
-        }
-        .hero-content { position: relative; z-index: 2; padding: 20px; width: 100%; }
-        .btn-play {
-            background-color: white; color: black; border: none;
-            padding: 10px 25px; border-radius: 4px; font-weight: bold;
-            cursor: pointer;
-        }
-
-        .category-title { font-size: 18px; margin: 20px 20px 10px; font-weight: 600; }
-        .scroll-container {
-            display: flex; overflow-x: auto; padding: 0 20px; gap: 10px;
-            scrollbar-width: none;
-        }
-        .movie-card {
-            min-width: 110px; height: 160px; background-color: var(--card-bg);
-            border-radius: 8px; overflow: hidden; flex-shrink: 0;
-        }
+        :root { --bg-color: #141414; --card-bg: #1f1f1f; --text-color: #ffffff; --accent-color: #e50914; }
+        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        header { padding: 15px; background: rgba(0,0,0,0.9); position: fixed; width: 100%; z-index: 100; top: 0; text-align: center; border-bottom: 1px solid #333; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 2px; }
+        .hero { height: 55vh; background-image: url('https://placehold.co/600x800/222/fff?text=SHNX+Exclusive'); background-size: cover; background-position: center; display: flex; align-items: flex-end; position: relative; }
+        .hero::after { content: ''; position: absolute; bottom: 0; width: 100%; height: 60%; background: linear-gradient(to top, var(--bg-color), transparent); }
+        .hero-content { position: relative; z-index: 2; padding: 25px; width: 100%; }
+        .btn-play { background-color: white; color: black; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .category-title { font-size: 19px; margin: 30px 20px 15px; font-weight: bold; color: #fff; border-right: 4px solid var(--accent-color); padding-right: 10px; }
+        .scroll-container { display: flex; overflow-x: auto; padding: 0 20px 20px; gap: 15px; scrollbar-width: none; }
+        .movie-card { min-width: 130px; height: 190px; background-color: var(--card-bg); border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative; border: 1px solid #333; }
         .movie-card img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div id="video-player-modal">
-        <button class="close-btn" onclick="closeVideo()">❌ إغلاق</button>
-        <iframe id="video-frame" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" allowfullscreen></iframe>
-        <div style="padding: 20px; text-align: center;">
-            <h3>جارِ المشاهدة...</h3>
-            <p style="color: #aaa; font-size: 14px;">يتم البث عبر سيرفرات خاصة</p>
-        </div>
-    </div>
-
-    <header>
-        <div class="logo">SHNX</div>
-    </header>
+    <header><div class="logo">SHNX MOVIES</div></header>
 
     <div class="hero">
         <div class="hero-content">
-            <h1>مسلسل أسامة الحصري</h1>
-            <p>رمضان 2026 • دراما</p>
-            <button class="btn-play" onclick="playMovie('https://vk.com/video_ext.php?oid=791768803&id=456260752&hd=2')">
-                ▶ مشاهدة الحلقة
+            <h1 style="margin-bottom: 5px;">تجربة العرض المباشر</h1>
+            <p style="color: #ccc; margin-bottom: 20px;">دقة عالية • بدون VPN</p>
+            <button class="btn-play" onclick="watchTelegram('https://t.me/SHNX26/363')">
+                <span>▶</span> تشغيل الفيديو الآن
             </button>
         </div>
     </div>
 
-    <div class="category-title">جديد رمضان</div>
+    <div class="category-title">أحدث الحلقات</div>
     <div class="scroll-container">
-        <div class="movie-card" onclick="playMovie('https://vk.com/video_ext.php?oid=791768803&id=456260752&hd=2')">
-            <img src="https://placehold.co/200x300?text=Ep+1" alt="Ep1">
+        <div class="movie-card" onclick="watchTelegram('https://t.me/SHNX26/363')">
+            <img src="https://placehold.co/200x300/e50914/fff?text=EP+1" alt="Ep1">
         </div>
-        <div class="movie-card" onclick="playMovie('RABET_VIDEO_2')">
-            <img src="https://placehold.co/200x300?text=Ep+2" alt="Ep2">
+        <div class="movie-card">
+            <img src="https://placehold.co/200x300/333/fff?text=Soon" alt="Soon">
         </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        // تلوين شريط الحالة في تليجرام للون الأسود الفخم
+        tg.setHeaderColor('#141414');
 
-        // دالة تشغيل الفيديو
-        function playMovie(link) {
-            let modal = document.getElementById('video-player-modal');
-            let frame = document.getElementById('video-frame');
-            
-            frame.src = link; // وضع الرابط داخل المشغل
-            modal.style.display = 'flex'; // إظهار النافذة
-        }
-
-        // دالة إغلاق الفيديو
-        function closeVideo() {
-            let modal = document.getElementById('video-player-modal');
-            let frame = document.getElementById('video-frame');
-            
-            frame.src = ""; // إيقاف الفيديو
-            modal.style.display = 'none'; // إخفاء النافذة
+        function watchTelegram(link) {
+            // استخدام تليجرام لفتح الرابط داخلياً بأفضل طريقة
+            tg.openTelegramLink(link);
         }
     </script>
 </body>
