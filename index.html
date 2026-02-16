@@ -6,113 +6,172 @@
     <title>SHNX Movies</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --bg-color: #0a0a0a; --card-bg: #1a1a1a; --accent: #e50914; }
-        body { margin: 0; background: var(--bg-color); color: white; font-family: sans-serif; direction: rtl; padding-bottom: 30px; }
-        header { padding: 15px; background: rgba(0,0,0,0.9); position: fixed; width: 100%; top: 0; z-index: 100; text-align: center; border-bottom: 1px solid #222; }
-        .logo { font-size: 26px; font-weight: 900; color: var(--accent); }
-        .hero { height: 45vh; background: linear-gradient(to top, var(--bg-color), transparent), url('https://placehold.co/600x400/222/fff?text=SHNX+MOVIES'); background-size: cover; display: flex; align-items: flex-end; padding: 20px; }
-        .section-title { margin: 20px 15px 10px; font-size: 18px; font-weight: bold; border-right: 3px solid var(--accent); padding-right: 10px; }
-        .scroll-container { display: flex; overflow-x: auto; padding: 0 15px; gap: 10px; }
-        .card { min-width: 100px; background: var(--card-bg); border-radius: 8px; overflow: hidden; text-align: center; cursor: pointer; border: 1px solid #222; }
-        .card img { width: 100%; height: 140px; object-fit: cover; }
-        .card-title { font-size: 11px; padding: 5px; white-space: nowrap; overflow: hidden; }
+        :root { --bg-color: #000000; --card-bg: #1c1c1c; --accent: #E50914; --text: #fff; }
+        body { margin: 0; background: var(--bg-color); color: var(--text); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
         
-        /* صفحة الحلقات */
-        #episodes-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 200; overflow-y: auto; }
-        .ep-header { padding: 15px; display: flex; align-items: center; gap: 15px; background: #111; position: sticky; top: 0; }
-        .ep-list { padding: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .ep-item { background: #222; padding: 15px 5px; border-radius: 5px; text-align: center; font-size: 13px; font-weight: bold; }
-        .ep-item.active { background: var(--accent); color: white; }
-        .ep-item.locked { opacity: 0.3; }
+        /* 1. تنسيق الهيدر */
+        header { padding: 15px; position: fixed; top: 0; width: 100%; z-index: 50; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); display: flex; align-items: center; justify-content: center; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 10px rgba(229, 9, 20, 0.5); }
+
+        /* 2. تنسيق الرئيسية */
+        #home-screen { padding-top: 60px; padding-bottom: 50px; }
+        .hero { height: 50vh; background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; margin-bottom: 20px; }
+        .hero::after { content: ''; position: absolute; bottom: 0; width: 100%; height: 80%; background: linear-gradient(to top, var(--bg-color), transparent); }
+        .hero-content { position: relative; z-index: 2; padding: 20px; width: 100%; }
+        
+        .section-title { font-size: 16px; font-weight: bold; margin: 10px 15px; border-right: 3px solid var(--accent); padding-right: 8px; }
+        .scroll-row { display: flex; overflow-x: auto; padding: 0 15px 15px; gap: 10px; scrollbar-width: none; }
+        .card { min-width: 100px; width: 100px; cursor: pointer; transition: 0.2s; }
+        .card:active { transform: scale(0.95); }
+        .card img { width: 100%; height: 150px; border-radius: 6px; object-fit: cover; background: #333; }
+        .card-name { font-size: 11px; margin-top: 5px; text-align: center; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* 3. تنسيق صفحة الحلقات */
+        #episodes-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 60; overflow-y: auto; }
+        .ep-header { padding: 15px; display: flex; align-items: center; gap: 15px; background: rgba(20,20,20,0.95); position: sticky; top: 0; border-bottom: 1px solid #333; }
+        .back-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 5px; }
+        .ep-grid { padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
+        .ep-btn { background: var(--card-bg); border: 1px solid #333; padding: 15px 5px; border-radius: 5px; text-align: center; color: #888; font-size: 13px; font-weight: bold; cursor: default; }
+        .ep-btn.active { background: var(--accent); color: white; border-color: var(--accent); cursor: pointer; box-shadow: 0 0 10px rgba(229, 9, 20, 0.4); }
+
+        /* 4. تنسيق شاشة المشغل (السينما) */
+        #player-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 100; flex-direction: column; }
+        .player-nav { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); position: absolute; top: 0; width: 100%; box-sizing: border-box; }
+        #video-frame { width: 100%; height: 100%; border: none; }
+        .loader { color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1; }
+
     </style>
 </head>
 <body>
 
     <header><div class="logo">SHNX</div></header>
 
-    <div id="main-page">
-        <div class="hero"><div><h1 id="hero-name">مرحباً أسامة</h1><p>اختر مسلسلك المفضل وابدأ المشاهدة</p></div></div>
-        <div id="sections-container"></div>
+    <div id="home-screen">
+        <div class="hero" style="background-image: url('https://placehold.co/600x400/222/fff?text=Ramadan+2026');">
+            <div class="hero-content">
+                <h1>أهلاً بك</h1>
+                <p style="color:#bbb; font-size:14px;">استمتع بأحدث المسلسلات الحصرية</p>
+            </div>
+        </div>
+
+        <div class="section-title">مسلسلات رمضان</div>
+        <div class="scroll-row" id="series-container"></div>
     </div>
 
-    <div id="episodes-page">
-        <div class="ep-header"><button onclick="closeEp()" style="background:none; border:none; color:white; font-size:20px;">➜</button> <span id="current-show-title">اسم المسلسل</span></div>
-        <div class="ep-list" id="ep-list-container"></div>
+    <div id="episodes-screen">
+        <div class="ep-header">
+            <button class="back-btn" onclick="goHome()">➜</button>
+            <h3 id="ep-title" style="margin:0; font-size:16px;">اسم المسلسل</h3>
+        </div>
+        <div class="ep-grid" id="ep-grid"></div>
+    </div>
+
+    <div id="player-screen">
+        <div class="player-nav">
+            <button class="back-btn" onclick="closePlayer()">➜ خروج</button>
+            <span style="font-size:12px; opacity:0.7;">مشاهدة ممتعة</span>
+        </div>
+        <div class="loader">جارِ التحميل...</div>
+        <iframe id="video-frame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        tg.setHeaderColor('#000000');
 
-        // ---------------------------------------------------------
-        // 1. قائمة المسلسلات (تعدل الأسماء والصور هنا فقط)
-        // ---------------------------------------------------------
-        const mySeries = [
+        // ============================================
+        //  1. إعدادات المسلسلات (أضف الصور والأسماء)
+        // ============================================
+        const seriesData = [
             { name: "شباب البومب", img: "https://placehold.co/200x300?text=Shabab" },
             { name: "شارع الأعشى 2", img: "https://placehold.co/200x300?text=Asha" },
             { name: "يوميات رجل عانس", img: "https://placehold.co/200x300?text=Anis" },
             { name: "جاك العلم 3", img: "https://placehold.co/200x300?text=Jak" },
             { name: "رامز ليڤل", img: "https://placehold.co/200x300?text=Ramez" },
             { name: "كحيلان", img: "https://placehold.co/200x300?text=Kahilan" }
-            // يمكنك إضافة البقية بنفس النمط...
         ];
 
-        // ---------------------------------------------------------
-        // 2. جدول الروابط (هنا تضع روابط الحلقات فقط)
-        // ---------------------------------------------------------
+        // ============================================
+        //  2. جدول الروابط (أضف روابطك هنا)
+        // ============================================
         const linksDB = {
             "شباب البومب": {
-                1: "https://vkvideo.ru/video_ext.php?oid=791768803&id=456260752&hash=ec5473ebc5345dd6&hd=2",
-                2: "ضع_رابط_الحلقة_2_هنا",
-                3: "", // اتركها فارغة إذا لم تتوفر بعد
+                1: "https://vkvideo.ru/video_ext.php?oid=791768803&id=456260752&hash=ec5473ebc5345dd6&hd=2", // مثال (غيره برابطك)
+                2: "", // فارغ = قريباً
             },
-            "رامز ليڤل": {
-                1: "رابط_رامز_هنا",
-            },
-            // أضف أي مسلسل من القائمة أعلاه هنا وضع روابطه
+            "كحيلان": {
+                1: "رابط_حلقة_1",
+            }
         };
 
-        // ---------------------------------------------------------
-        // باقي الكود يعمل آلياً - لا تلمس شيئاً هنا
-        // ---------------------------------------------------------
-        function init() {
-            let container = document.getElementById('sections-container');
-            let html = '<div class="section-title">كل المسلسلات</div><div class="scroll-container">';
-            mySeries.forEach(s => {
-                html += `<div class="card" onclick="openEp('${s.name}')"><img src="${s.img}"><div class="card-title">${s.name}</div></div>`;
+        // ============================================
+        //  3. المحرك (لا تلمس الكود بالأسفل)
+        // ============================================
+        
+        // تشغيل الرئيسية
+        function initHome() {
+            let container = document.getElementById('series-container');
+            seriesData.forEach(s => {
+                let div = document.createElement('div');
+                div.className = 'card';
+                div.onclick = () => openEpisodes(s.name);
+                div.innerHTML = `<img src="${s.img}"><div class="card-name">${s.name}</div>`;
+                container.appendChild(div);
             });
-            html += '</div>';
-            container.innerHTML = html;
         }
 
-        function openEp(name) {
-            document.getElementById('main-page').style.display = 'none';
-            document.getElementById('episodes-page').style.display = 'block';
-            document.getElementById('current-show-title').innerText = name;
+        // فتح قائمة الحلقات
+        function openEpisodes(name) {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('episodes-screen').style.display = 'block';
+            document.getElementById('ep-title').innerText = name;
             
-            let list = document.getElementById('ep-list-container');
-            list.innerHTML = "";
-            
-            for(let i=1; i<=30; i++) {
+            let grid = document.getElementById('ep-grid');
+            grid.innerHTML = ""; // مسح القائمة
+
+            for (let i = 1; i <= 30; i++) {
+                let btn = document.createElement('div');
+                // التحقق من وجود رابط
                 let link = (linksDB[name] && linksDB[name][i]) ? linksDB[name][i] : null;
-                let item = document.createElement('div');
-                item.className = link ? 'ep-item active' : 'ep-item locked';
-                item.innerText = "الحلقة " + i;
-                if(link) {
-                    item.onclick = () => { tg.openLink(link); };
+                
+                btn.innerText = i;
+                if (link) {
+                    btn.className = 'ep-btn active';
+                    btn.onclick = () => openPlayer(link);
                 } else {
-                    item.onclick = () => { tg.showPopup({message: "هذه الحلقة ستتوفر قريباً"}); };
+                    btn.className = 'ep-btn'; // باهت
+                    btn.onclick = () => tg.showPopup({message: "الحلقة غير متوفرة بعد"});
                 }
-                list.appendChild(item);
+                grid.appendChild(btn);
             }
         }
 
-        function closeEp() {
-            document.getElementById('episodes-page').style.display = 'none';
-            document.getElementById('main-page').style.display = 'block';
+        // فتح المشغل (السينما)
+        function openPlayer(url) {
+            let player = document.getElementById('player-screen');
+            let frame = document.getElementById('video-frame');
+            
+            frame.src = url; // وضع الرابط
+            player.style.display = 'flex'; // إظهار الشاشة
         }
 
-        init();
+        // إغلاق المشغل
+        function closePlayer() {
+            let player = document.getElementById('player-screen');
+            let frame = document.getElementById('video-frame');
+            
+            frame.src = ""; // إيقاف الفيديو
+            player.style.display = 'none'; // إخفاء الشاشة
+        }
+
+        // العودة للرئيسية
+        function goHome() {
+            document.getElementById('episodes-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'block';
+        }
+
+        initHome();
     </script>
 </body>
 </html>
