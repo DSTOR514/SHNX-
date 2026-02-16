@@ -6,7 +6,7 @@
     <title>SHNX 2026</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* === 1. التأسيس والألوان (نتفلكس ستايل) === */
+        /* === 1. التأسيس والألوان === */
         :root {
             --bg: #000000;
             --surface: #141414;
@@ -14,7 +14,7 @@
             --text: #ffffff;
             --text-sec: #b3b3b3;
         }
-        body { margin: 0; background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 20px; }
+        body { margin: 0; background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 30px; }
         
         /* الهيدر */
         header { position: fixed; top: 0; width: 100%; height: 60px; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; }
@@ -23,43 +23,61 @@
         .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: white; opacity: 0.9; }
 
         /* البانر الرئيسي (Hero) */
-        .hero { height: 65vh; position: relative; background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); background-size: cover; background-position: center; display: flex; align-items: flex-end; }
-        .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 10%, transparent 60%); }
-        .hero-content { position: relative; z-index: 2; padding: 20px; text-align: center; width: 100%; }
+        .hero { 
+            height: 60vh; 
+            position: relative; 
+            background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); 
+            background-size: cover; 
+            background-position: top center; /* تعديل لظهور الوجوه */
+            display: flex; 
+            align-items: flex-end; 
+        }
+        .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 5%, transparent 70%); }
+        .hero-content { position: relative; z-index: 2; padding: 20px; text-align: center; width: 100%; padding-bottom: 40px; }
         .hero-tags { font-size: 13px; color: var(--text-sec); margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; }
         .hero-tags span { display: inline-block; position: relative; }
         .hero-tags span:not(:last-child)::after { content: '•'; margin-left: 10px; color: var(--accent); }
-        .btn-play-hero { background: white; color: black; border: none; padding: 12px 30px; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; }
+        .btn-play-hero { background: white; color: black; border: none; padding: 12px 30px; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
 
         /* القوائم */
-        .section-title { font-size: 17px; font-weight: 700; margin: 25px 20px 10px; color: #e5e5e5; }
-        .scroll-list { display: flex; overflow-x: auto; padding: 0 20px 20px; gap: 10px; scrollbar-width: none; }
+        .section-title { font-size: 17px; font-weight: 700; margin: 10px 20px 10px; color: #e5e5e5; border-right: 3px solid var(--accent); padding-right: 8px; }
+        .scroll-list { display: flex; overflow-x: auto; padding: 0 20px 20px; gap: 12px; scrollbar-width: none; }
         .scroll-list::-webkit-scrollbar { display: none; }
-        .card { min-width: 110px; width: 110px; cursor: pointer; transition: transform 0.2s; position: relative; }
-        .card:active { transform: scale(0.96); }
-        .card img { width: 100%; height: 160px; border-radius: 6px; object-fit: cover; background: #222; }
-        .card-badge { position: absolute; top: 5px; right: 5px; background: var(--accent); color: white; font-size: 9px; padding: 2px 4px; border-radius: 2px; font-weight: bold; }
-
-        /* === 2. صفحة التفاصيل (Modal) === */
-        #details-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 200; overflow-y: auto; }
-        .details-hero { height: 40vh; position: relative; background-size: cover; background-position: top; }
-        .details-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); }
-        .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); width: 35px; height: 35px; border-radius: 50%; color: white; border: none; font-size: 18px; z-index: 202; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        .details-info { padding: 0 20px; transform: translateY(-40px); position: relative; z-index: 3; }
+        /* الكروت المحسنة */
+        .card { min-width: 110px; width: 110px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .card:active { transform: scale(0.92); }
+        .card img { 
+            width: 100%; height: 165px; border-radius: 8px; 
+            object-fit: cover; object-position: center; 
+            background: #1a1a1a; display: block; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+        }
+        .card-badge { position: absolute; top: 6px; left: 6px; background: var(--accent); color: white; font-size: 10px; padding: 3px 6px; border-radius: 3px; font-weight: 900; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        /* === 2. الصفحات والطبقات === */
+        #details-page, #player-overlay { display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 200; }
+        
+        /* تفاصيل المسلسل */
+        #details-page { background: var(--bg); overflow-y: auto; }
+        .details-hero { height: 45vh; position: relative; background-size: cover; background-position: center; }
+        .details-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); }
+        .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); width: 35px; height: 35px; border-radius: 50%; color: white; border: none; font-size: 18px; z-index: 202; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        .details-info { padding: 0 20px; transform: translateY(-50px); position: relative; z-index: 3; }
         .d-title { font-size: 28px; font-weight: 800; margin-bottom: 5px; }
         .d-meta { color: var(--text-sec); font-size: 13px; margin-bottom: 15px; }
-        .d-desc { font-size: 14px; line-height: 1.5; color: #ddd; margin-bottom: 20px; }
-        .btn-channel { background: #2A2A2A; color: white; width: 100%; padding: 12px; border: none; border-radius: 4px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .d-desc { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 20px; }
+        .btn-channel { background: #333; color: white; width: 100%; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* شبكة الحلقات */
-        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; margin-bottom: 50px; }
+        /* الحلقات */
+        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 10px; margin-bottom: 50px; }
         .ep-box { background: #222; aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; color: #666; border: 1px solid #333; cursor: default; }
         .ep-box.active { background: var(--accent); color: white; border-color: var(--accent); cursor: pointer; box-shadow: 0 4px 10px rgba(229, 9, 20, 0.3); }
 
-        /* === 3. المشغل (Player) === */
-        #player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 300; flex-direction: column; justify-content: center; }
-        .player-close { position: absolute; top: 20px; right: 20px; color: white; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer; z-index: 301; }
+        /* المشغل */
+        #player-overlay { background: black; z-index: 300; flex-direction: column; justify-content: center; }
+        .player-close { position: absolute; top: 20px; right: 20px; color: white; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; z-index: 301; font-size: 12px; }
         iframe { width: 100%; height: 100%; border: none; }
 
     </style>
@@ -69,15 +87,15 @@
     <header>
         <div class="logo">SHNX</div>
         <div class="header-icons">
-            <button class="icon-btn" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/SHNX26')">📢</button>
-            <button class="icon-btn" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/DII1Il')">💬</button>
+            <button class="icon-btn" onclick="tg.openTelegramLink('https://t.me/SHNX26')">📢</button>
+            <button class="icon-btn" onclick="tg.openTelegramLink('https://t.me/DII1Il')">💬</button>
         </div>
     </header>
 
     <div id="home-view">
         <div class="hero">
             <div class="hero-content">
-                <h1 style="margin:0; font-size: 32px; font-weight: 800;">شباب البومب 14</h1>
+                <h1 style="margin:0; font-size: 32px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">شباب البومب 14</h1>
                 <div class="hero-tags"><span>كوميدي</span><span>رمضان 2026</span><span>حصري</span></div>
                 <button class="btn-play-hero" onclick="openDetails('شباب البومب 14')">▶  صفحة المسلسل</button>
             </div>
@@ -101,17 +119,17 @@
             <div class="d-meta" id="d-meta">2026 • موسم 1</div>
             <div class="d-desc" id="d-desc">الوصف...</div>
             
-            <button class="btn-channel" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/SHNX26')">
+            <button class="btn-channel" onclick="tg.openTelegramLink('https://t.me/SHNX26')">
                 📢 اشترك في قناة المسلسلات
             </button>
 
-            <div style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">الحلقات</div>
+            <div style="font-weight: bold; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #333; padding-bottom: 10px;">الحلقات</div>
             <div class="episodes-grid" id="d-episodes"></div>
         </div>
     </div>
 
     <div id="player-overlay">
-        <button class="player-close" onclick="closePlayer()">خروج ✕</button>
+        <button class="player-close" onclick="closePlayer()">عودة للقائمة ✕</button>
         <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
     </div>
 
@@ -121,93 +139,79 @@
         tg.setHeaderColor('#000000');
 
         // ============================================
-        // 1. قاعدة البيانات (وصف وصور المسلسلات)
+        // 1. قاعدة البيانات (تم تصحيح الروابط)
         // ============================================
         const seriesDB = [ 
             // الأكثر مشاهدة (Trending)
             { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية والقضايا الاجتماعية بطرح جريء ومختلف." },
-            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg"", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
-            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
-            { name: "كحيلان", cat: "trending", img: "https://share.google/wDLNA1YJZtgVkEw8j", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
-            { name: "يوميات رجل متزوج", cat: "trending", img: "https://share.google/lMqWnt6FUcw6h21Ly", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
             
-            // كوميديا (Comedy)
-            { name: "يوميات رجل عانس 2", cat: "comedy", img: "https://placehold.co/300x450?text=Anis+2", desc: "استكمالاً ليوميات العزوبية، مواقف ساخرة يواجهها بطلنا في رحلة البحث عن شريكة الحياة." },
-            { name: "رامز ليڤل", cat: "comedy", img: "https://placehold.co/300x450?text=Ramez", desc: "مقالب رامز جلال تصل لمستوى جديد من الجنون والرعب، ضحايا جدد ومفاجآت غير متوقعة." },
-            { name: "عايله مايله", cat: "comedy", img: "https://placehold.co/300x450?text=Family", desc: "عائلة غريبة الأطوار تواجه مشاكل الحياة بطرق غير تقليدية ومضحكة." },
+            // تم تصحيح الخطأ هنا (حذف علامة التنصيص الزائدة)
+            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
+            
+            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
+            
+            // تنبيه: الروابط أدناه مؤقتة لأن روابط google لا تعمل كصور مباشرة
+            { name: "كحيلان", cat: "trending", img: "https://placehold.co/300x450?text=Kahilan", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
+            { name: "يوميات رجل متزوج", cat: "trending", img: "https://placehold.co/300x450?text=Married", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
+            
+            // كوميديا
+            { name: "يوميات رجل عانس 2", cat: "comedy", img: "https://placehold.co/300x450?text=Anis+2", desc: "استكمالاً ليوميات العزوبية." },
+            { name: "رامز ليڤل", cat: "comedy", img: "https://placehold.co/300x450?text=Ramez", desc: "مقالب رامز جلال تصل لمستوى جديد." },
+            { name: "عايله مايله", cat: "comedy", img: "https://placehold.co/300x450?text=Family", desc: "عائلة غريبة الأطوار تواجه مشاكل الحياة." },
 
-            // دراما (Drama) - البقية
-            { name: "غلط بنات", cat: "drama", img: "https://placehold.co/300x450?text=Ghalat", desc: "قصص اجتماعية واقعية تناقش قضايا الفتيات في المجتمع وتحدياتهن اليومية." },
-            { name: "بنات عبدالغني", cat: "drama", img: "https://placehold.co/300x450?text=Banat+G", desc: "صراع الإرث والسلطة بين شقيقات يسعين للسيطرة على إمبراطورية والدهن." },
-            { name: "الغميضه", cat: "drama", img: "https://placehold.co/300x450?text=Ghamida", desc: "جريمة غامضة تقلب حياة قرية هادئة، الكل متهم والكل يخفي سراً." },
-            { name: "ع حلوه والمره", cat: "drama", img: "https://placehold.co/300x450?text=Helwa", desc: "دراما رومانسية اجتماعية تدور حول تقلبات الحياة الزوجية والعلاقات الإنسانية." },
-            { name: "خطوات صغيره", cat: "drama", img: "https://placehold.co/300x450?text=Steps", desc: "قصة ملهمة عن الكفاح والنجاح رغم الصعاب، خطوة بخطوة نحو الحلم." },
-            { name: "اعوام الضلام", cat: "drama", img: "https://placehold.co/300x450?text=Dark+Years", desc: "مسلسل تاريخي يروي حقبة زمنية صعبة وكيف تكاتف الناس لتجاوزها." },
-            { name: "وجب القضاء", cat: "drama", img: "https://placehold.co/300x450?text=Wajab", desc: "دراما قانونية تدور داخل أروقة المحاكم، قضايا شائكة وحلول ذكية." },
-            { name: "وحوش2", cat: "drama", img: "https://placehold.co/300x450?text=Monsters+2", desc: "الجزء الثاني من سلسلة الإثارة، الخطر يقترب أكثر والوحوش البشرية تظهر." },
-            { name: "كسِره", cat: "drama", img: "https://placehold.co/300x450?text=Kasra", desc: "قصة إنسانية مؤثرة عن جبر الخواطر بعد الانكسار والعودة للحياة." }
+            // دراما
+            { name: "غلط بنات", cat: "drama", img: "https://placehold.co/300x450?text=Ghalat", desc: "قصص اجتماعية واقعية." },
+            { name: "بنات عبدالغني", cat: "drama", img: "https://placehold.co/300x450?text=Banat", desc: "صراع الإرث والسلطة." },
+            { name: "الغميضه", cat: "drama", img: "https://placehold.co/300x450?text=Ghamida", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
         ];
 
         // ============================================
-        // 2. جدول روابط الحلقات (هنا شغلك يا أسامة)
+        // 2. جدول الروابط
         // ============================================
         const linksDB = {
             "شباب البومب 14": {
                 1: "https://vkvideo.ru/video_ext.php?oid=791768803&id=456260752&hash=ec5473ebc5345dd6&hd=2",
-                2: "", // فارغ يعني قريباً
+                2: "", 
             },
-            "شارع الأعشى 2": {
-                1: "",
-            },
-            "كحيلان": {
-                1: "https://www.google.com", // مثال للتجربة
-            }
-            // ببساطة أضف أي مسلسل هنا إذا توفرت له روابط
+            "شارع الأعشى 2": { 1: "" },
+            "كحيلان": { 1: "https://www.google.com" }
         };
 
         // ============================================
-        // 3. المحرك البرمجي (لا تعدل شيئاً في الأسفل)
+        // 3. المحرك
         // ============================================
-
         function renderHome() {
             seriesDB.forEach(s => {
                 let listId = s.cat === "trending" ? "list-trending" : (s.cat === "comedy" ? "list-comedy" : "list-drama");
                 let container = document.getElementById(listId);
+                if(!container) return; // حماية من الأخطاء
                 
                 let card = document.createElement('div');
                 card.className = "card";
                 card.onclick = () => openDetails(s.name);
-                
-                // إضافة شارة "جديد" للمسلسلات
                 let badge = s.cat === "trending" ? '<div class="card-badge">TOP 10</div>' : '';
-                
-                card.innerHTML = `${badge}<img src="${s.img}" alt="${s.name}">`;
+                card.innerHTML = `${badge}<img src="${s.img}" alt="${s.name}" onerror="this.src='https://placehold.co/300x450?text=Error'">`;
                 container.appendChild(card);
             });
         }
 
         function openDetails(name) {
-            // البحث عن بيانات المسلسل
             let data = seriesDB.find(s => s.name === name);
             if (!data) return;
 
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('details-page').style.display = 'block';
 
-            // تعبئة البيانات
             document.getElementById('d-title').innerText = data.name;
             document.getElementById('d-desc').innerText = data.desc;
             document.getElementById('d-hero').style.backgroundImage = `url('${data.img}')`;
 
-            // بناء الحلقات
             let grid = document.getElementById('d-episodes');
             grid.innerHTML = "";
 
             for (let i = 1; i <= 30; i++) {
                 let box = document.createElement('div');
                 box.innerText = i;
-                
-                // هل توجد رابط لهذه الحلقة في linksDB؟
                 let link = (linksDB[name] && linksDB[name][i]) ? linksDB[name][i] : null;
 
                 if (link) {
@@ -215,7 +219,7 @@
                     box.onclick = () => openPlayer(link);
                 } else {
                     box.className = "ep-box";
-                    box.onclick = () => tg.showPopup({message: `عذراً، الحلقة ${i} لم تتوفر بعد`});
+                    box.onclick = () => tg.showPopup({message: `الحلقة ${i} قريباً`});
                 }
                 grid.appendChild(box);
             }
@@ -240,3 +244,4 @@
     </script>
 </body>
 </html>
+
