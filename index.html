@@ -23,7 +23,7 @@
         .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: white; opacity: 0.9; }
 
         /* البانر الرئيسي (Hero) */
-        <div class="hero" style="background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg');">
+        .hero { height: 65vh; position: relative; background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); background-size: cover; background-position: center; display: flex; align-items: flex-end; }
         .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 10%, transparent 60%); }
         .hero-content { position: relative; z-index: 2; padding: 20px; text-align: center; width: 100%; }
         .hero-tags { font-size: 13px; color: var(--text-sec); margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; }
@@ -124,11 +124,10 @@
         // 1. قاعدة البيانات (وصف وصور المسلسلات)
         // ============================================
         const seriesDB = [ 
-            { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد..." },
             // الأكثر مشاهدة (Trending)
             { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية والقضايا الاجتماعية بطرح جريء ومختلف." },
-            { name: "شارع الأعشى 2", cat: "trending", img: "https://share.google/uwkUBTnEc2OFPcuID", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
-            { name: "جاك العلم 3", cat: "trending", img: "https://share.google/HXmRoplWUrPfATeSz", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
+            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg"", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
+            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
             { name: "كحيلان", cat: "trending", img: "https://share.google/wDLNA1YJZtgVkEw8j", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
             { name: "يوميات رجل متزوج", cat: "trending", img: "https://share.google/lMqWnt6FUcw6h21Ly", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
             
