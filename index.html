@@ -43,8 +43,8 @@
 
         /* البانر الرئيسي - المنظر الرهيب */
         .hero { 
-            height: 75vh; position: relative; 
-            background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); 
+    height: 75vh; position: relative; 
+    background-image: url('https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg'); 
             background-size: cover; background-position: center top; 
             display: flex; align-items: flex-end; 
         }
@@ -120,11 +120,11 @@
     </header>
 
     <div id="home-view" class="fade-in">
-        <div class="hero" id="main-hero">
+        <div class="hero" style="background-image: url('https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg');">
     <div class="hero-content">
-        <h1 id="hero-title" style="font-size: 38px; margin: 0 0 10px;"></h1>
-        <p id="hero-desc" style="color: var(--text-sec); margin-bottom: 20px;"></p>
-        <button class="btn-play-hero" id="hero-btn">▶ مشاهدة الحلقات</button>
+        <h1 style="font-size: 38px; margin: 0 0 10px;">شارع الأعشى 2</h1>
+        <p style="color: var(--text-sec); margin-bottom: 20px;">دراما • رمضان 2026 • حصري</p>
+        <button class="btn-play-hero" onclick="openDetails('شارع الأعشى 2')">▶ مشاهدة الحلقات</button>
     </div>
         </div>
 
@@ -171,16 +171,6 @@
             { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
         ];
 
-function setupHero() {
-    const heroSeries = seriesDB.find(s => s.name === "شارع الأعشى 2");
-    if (!heroSeries) return;
-
-    document.getElementById('main-hero').style.backgroundImage = `url('${heroSeries.img}')`;
-    document.getElementById('hero-title').innerText = heroSeries.name;
-    document.getElementById('hero-desc').innerText = heroSeries.desc;
-    document.getElementById('hero-btn').onclick = () => openDetails(heroSeries.name);
-}
-        
         const linksDB = {
             "شباب البومب 14": { 1: "https://ok.ru/videoembed/11815522078977?nochat=1" },
             "كحيلان": { 1: "https://www.google.com" }
