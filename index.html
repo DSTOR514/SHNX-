@@ -6,7 +6,7 @@
     <title>SHNX 2026</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* === 1. التأسيس والألوان === */
+        /* === 1. التأسيس والألوان (كودك الأصلي) === */
         :root {
             --bg: #000000;
             --surface: #141414;
@@ -16,22 +16,12 @@
         }
         body { margin: 0; background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 30px; }
         
-        /* الهيدر */
         header { position: fixed; top: 0; width: 100%; height: 60px; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; }
         .logo { font-size: 24px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-shadow: 0 0 10px rgba(229, 9, 20, 0.6); }
         .header-icons { display: flex; gap: 15px; }
         .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: white; opacity: 0.9; }
 
-        /* البانر الرئيسي (Hero) */
-        .hero { 
-            height: 60vh; 
-            position: relative; 
-            background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); 
-            background-size: cover; 
-            background-position: top center; /* تعديل لظهور الوجوه */
-            display: flex; 
-            align-items: flex-end; 
-        }
+        .hero { height: 60vh; position: relative; background-size: cover; background-position: top center; display: flex; align-items: flex-end; }
         .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 5%, transparent 70%); }
         .hero-content { position: relative; z-index: 2; padding: 20px; text-align: center; width: 100%; padding-bottom: 40px; }
         .hero-tags { font-size: 13px; color: var(--text-sec); margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; }
@@ -39,52 +29,59 @@
         .hero-tags span:not(:last-child)::after { content: '•'; margin-left: 10px; color: var(--accent); }
         .btn-play-hero { background: white; color: black; border: none; padding: 12px 30px; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
 
-        /* القوائم */
         .section-title { font-size: 17px; font-weight: 700; margin: 10px 20px 10px; color: #e5e5e5; border-right: 3px solid var(--accent); padding-right: 8px; }
         .scroll-list { display: flex; overflow-x: auto; padding: 0 20px 20px; gap: 12px; scrollbar-width: none; }
-        .scroll-list::-webkit-scrollbar { display: none; }
-        
-        /* الكروت المحسنة */
         .card { min-width: 110px; width: 110px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .card:active { transform: scale(0.92); }
-        .card img { 
-            width: 100%; height: 165px; border-radius: 8px; 
-            object-fit: cover; object-position: center; 
-            background: #1a1a1a; display: block; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
-        }
-        .card-badge { position: absolute; top: 6px; left: 6px; background: var(--accent); color: white; font-size: 10px; padding: 3px 6px; border-radius: 3px; font-weight: 900; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card img { width: 100%; height: 165px; border-radius: 8px; object-fit: cover; background: #1a1a1a; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .card-badge { position: absolute; top: 6px; left: 6px; background: var(--accent); color: white; font-size: 10px; padding: 3px 6px; border-radius: 3px; font-weight: 900; }
 
-        /* === 2. الصفحات والطبقات === */
-        #details-page, #player-overlay { display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 200; }
+        /* === 2. تطوير صفحة التفاصيل (نظام شاهد) === */
+        #details-page { display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 200; background: var(--bg); overflow-y: auto; }
         
-        /* تفاصيل المسلسل */
-        #details-page { background: var(--bg); overflow-y: auto; }
+        /* حاوية المشغل في الأعلى */
+        #video-container { 
+            display: none; 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            background: #000; 
+            position: sticky; 
+            top: 0; 
+            z-index: 210; 
+        }
+        #video-container iframe { width: 100%; height: 100%; border: none; }
+
         .details-hero { height: 45vh; position: relative; background-size: cover; background-position: center; }
         .details-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); }
-        .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); width: 35px; height: 35px; border-radius: 50%; color: white; border: none; font-size: 18px; z-index: 202; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .close-btn { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); width: 35px; height: 35px; border-radius: 50%; color: white; border: none; font-size: 18px; z-index: 211; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        .details-info { padding: 0 20px; transform: translateY(-50px); position: relative; z-index: 3; }
-        .d-title { font-size: 28px; font-weight: 800; margin-bottom: 5px; }
+        .details-info { padding: 0 20px; transform: translateY(-30px); position: relative; z-index: 3; }
+        .d-title { font-size: 26px; font-weight: 800; margin-bottom: 5px; }
         .d-meta { color: var(--text-sec); font-size: 13px; margin-bottom: 15px; }
         .d-desc { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 20px; }
-        .btn-channel { background: #333; color: white; width: 100%; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* الحلقات */
-        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 10px; margin-bottom: 50px; }
-        .ep-box { background: #222; aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; color: #666; border: 1px solid #333; cursor: default; }
-        .ep-box.active { background: var(--accent); color: white; border-color: var(--accent); cursor: pointer; box-shadow: 0 4px 10px rgba(229, 9, 20, 0.3); }
-
-        /* المشغل */
-        #player-overlay { background: black; z-index: 300; flex-direction: column; justify-content: center; }
-        .player-close { position: absolute; top: 20px; right: 20px; color: white; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; z-index: 301; font-size: 12px; }
-        iframe { width: 100%; height: 100%; border: none; }
+        /* قائمة الحلقات الطولية (نظام شاهد) */
+        .ep-item { 
+            display: flex; 
+            align-items: center; 
+            background: #141414; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-bottom: 10px;
+            gap: 15px;
+            border: 1px solid #222;
+        }
+        .ep-item.active { border-color: var(--accent); background: #1a1a1a; }
+        .ep-number { width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
+        .ep-item.active .ep-number { background: var(--accent); }
+        .ep-info { flex: 1; }
+        .ep-name { font-size: 15px; font-weight: bold; }
+        .ep-status { font-size: 11px; color: var(--accent); }
 
     </style>
 </head>
 <body>
 
-    <header>
+    <header id="main-header">
         <div class="logo">SHNX</div>
         <div class="header-icons">
             <button class="icon-btn" onclick="tg.openTelegramLink('https://t.me/SHNX26')">📢</button>
@@ -97,7 +94,7 @@
             <div class="hero-content">
                 <h1 style="margin:0; font-size: 32px; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">شباب البومب 14</h1>
                 <div class="hero-tags"><span>كوميدي</span><span>رمضان 2026</span><span>حصري</span></div>
-                <button class="btn-play-hero" onclick="openDetails('شباب البومب 14')">▶  صفحة المسلسل</button>
+                <button class="btn-play-hero" onclick="openDetails('شباب البومب 14')">▶ صفحة المسلسل</button>
             </div>
         </div>
 
@@ -113,88 +110,62 @@
 
     <div id="details-page">
         <button class="close-btn" onclick="closeDetails()">✕</button>
+        
+        <div id="video-container">
+            <iframe id="video-frame" src="" allowfullscreen allow="autoplay; encrypted-media" 
+                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-popups allow-popups-to-escape-sandbox">
+            </iframe>
+        </div>
+
         <div class="details-hero" id="d-hero"></div>
+
         <div class="details-info">
             <div class="d-title" id="d-title">Title</div>
             <div class="d-meta" id="d-meta">2026 • موسم 1</div>
             <div class="d-desc" id="d-desc">الوصف...</div>
             
-            <button class="btn-channel" onclick="tg.openTelegramLink('https://t.me/SHNX26')">
+            <button style="background: #333; color: white; width: 100%; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="tg.openTelegramLink('https://t.me/SHNX26')">
                 📢 اشترك في قناة المسلسلات
             </button>
 
             <div style="font-weight: bold; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #333; padding-bottom: 10px;">الحلقات</div>
-            <div class="episodes-grid" id="d-episodes"></div>
+            <div id="d-episodes-list"></div>
         </div>
     </div>
-
-    <div id="player-overlay" style="background: #000; display: none; flex-direction: column; align-items: center; justify-content: center;">
-        <div class="player-header" style="position: absolute; top: 10px; right: 10px; z-index: 999;">
-            <button class="player-close" onclick="closePlayer()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; backdrop-filter: blur(5px);">✕ عودة</button>
-        </div>
-        
-        <div class="iframe-container" style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;">
-            <iframe id="video-frame" 
-                src="" 
-                style="width: 100%; height: 100%; border: none;" 
-                allowfullscreen 
-                allow="autoplay; fullscreen">
-            </iframe>
-        </div>
-    </div>
-
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.setHeaderColor('#000000');
 
-        // ============================================
-        // 1. قاعدة البيانات (تم تصحيح الروابط)
-        // ============================================
+        // === قاعدة بياناتك (بقية كما هي تماماً) ===
         const seriesDB = [ 
-            // الأكثر مشاهدة (Trending)
             { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية والقضايا الاجتماعية بطرح جريء ومختلف." },
-            
-            // تم تصحيح الخطأ هنا (حذف علامة التنصيص الزائدة)
             { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
-            
             { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
-            
-            // تنبيه: الروابط أدناه مؤقتة لأن روابط google لا تعمل كصور مباشرة
             { name: "كحيلان", cat: "trending", img: "https://i.postimg.cc/NfZXGXwB/20260216-144848.jpg", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
             { name: "يوميات رجل متزوج", cat: "trending", img: "https://i.postimg.cc/gjYCZr94/ca44856a-bf4d-4ac9-8014-85e9e2e35a12.jpg", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
-            
-            // كوميديا
             { name: "رامز ليڤل", cat: "comedy", img: "https://i.postimg.cc/7Pj7wR7y/Picsart-26-02-16-15-20-13-051.jpg", desc: "مقالب رامز جلال تصل لمستوى جديد." },
             { name: "عايله مايله", cat: "comedy", img: "https://i.postimg.cc/bwx16RsB/20260216-152905.jpg", desc: "عائلة غريبة الأطوار تواجه مشاكل الحياة." },
-
-            // دراما
             { name: "غلط بنات", cat: "drama", img: "https://i.postimg.cc/sxWJ3CgW/20260216-153050.jpg", desc: "قصص اجتماعية واقعية." },
             { name: "بنات عبدالغني", cat: "drama", img: "https://i.postimg.cc/x8FXbCjh/20260216-165829.jpg", desc: "صراع الإرث والسلطة." },
             { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
         ];
 
-        // ============================================
-        // 2. جدول الروابط
-        // ============================================
         const linksDB = {
             "شباب البومب 14": {
                 1: "https://ok.ru/videoembed/11815522078977?nochat=1",
-                2: "", 
+                2: "" 
             },
             "شارع الأعشى 2": { 1: "" },
             "كحيلان": { 1: "https://www.google.com" }
         };
 
-        // ============================================
-        // 3. المحرك
-        // ============================================
         function renderHome() {
             seriesDB.forEach(s => {
                 let listId = s.cat === "trending" ? "list-trending" : (s.cat === "comedy" ? "list-comedy" : "list-drama");
                 let container = document.getElementById(listId);
-                if(!container) return; // حماية من الأخطاء
+                if(!container) return;
                 
                 let card = document.createElement('div');
                 card.className = "card";
@@ -210,48 +181,62 @@
             if (!data) return;
 
             document.getElementById('home-view').style.display = 'none';
+            document.getElementById('main-header').style.display = 'none'; // إخفاء الهيدر
             document.getElementById('details-page').style.display = 'block';
 
             document.getElementById('d-title').innerText = data.name;
             document.getElementById('d-desc').innerText = data.desc;
             document.getElementById('d-hero').style.backgroundImage = `url('${data.img}')`;
+            document.getElementById('d-hero').style.display = 'block';
+            document.getElementById('video-container').style.display = 'none';
 
-            let grid = document.getElementById('d-episodes');
-            grid.innerHTML = "";
+            let listContainer = document.getElementById('d-episodes-list');
+            listContainer.innerHTML = "";
 
             for (let i = 1; i <= 30; i++) {
-                let box = document.createElement('div');
-                box.innerText = i;
                 let link = (linksDB[name] && linksDB[name][i]) ? linksDB[name][i] : null;
-
+                let item = document.createElement('div');
+                item.className = "ep-item";
+                item.style.opacity = link ? "1" : "0.4";
+                
+                item.innerHTML = `
+                    <div class="ep-number">${i}</div>
+                    <div class="ep-info">
+                        <div class="ep-name">الحلقة ${i}</div>
+                        <div class="ep-status">${link ? "شاهد الآن" : "قريباً"}</div>
+                    </div>
+                `;
+                
                 if (link) {
-                    box.className = "ep-box active";
-                    box.onclick = () => openPlayer(link);
+                    item.onclick = () => openPlayer(link, item);
                 } else {
-                    box.className = "ep-box";
-                    box.onclick = () => tg.showPopup({message: `الحلقة ${i} قريباً`});
+                    item.onclick = () => tg.showPopup({message: `الحلقة ${i} ستتوفر قريباً بإذن الله`});
                 }
-                grid.appendChild(box);
+                listContainer.appendChild(item);
             }
         }
 
+        function openPlayer(url, element) {
+            document.getElementById('d-hero').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
+            document.getElementById('video-frame').src = url;
+
+            // تمييز الحلقة المختارة
+            document.querySelectorAll('.ep-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // الصعود للأعلى لمشاهدة الفيديو (مثل شاهد)
+            document.getElementById('details-page').scrollTo({top: 0, behavior: 'smooth'});
+        }
+
         function closeDetails() {
+            document.getElementById('video-frame').src = "";
             document.getElementById('details-page').style.display = 'none';
             document.getElementById('home-view').style.display = 'block';
-        }
-
-        function openPlayer(url) {
-            document.getElementById('video-frame').src = url;
-            document.getElementById('player-overlay').style.display = 'flex';
-        }
-
-        function closePlayer() {
-            document.getElementById('video-frame').src = "";
-            document.getElementById('player-overlay').style.display = 'none';
+            document.getElementById('main-header').style.display = 'flex';
         }
 
         renderHome();
     </script>
 </body>
 </html>
-
