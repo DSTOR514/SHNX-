@@ -28,7 +28,7 @@
             position: relative; 
             background-image: url('https://i.ibb.co/kbvczQp/20260216-123144.jpg'); 
             background-size: cover; 
-            background-position: top center; /* تعديل لظهور الوجوه */
+            background-position: top center; 
             display: flex; 
             align-items: flex-end; 
         }
@@ -44,7 +44,7 @@
         .scroll-list { display: flex; overflow-x: auto; padding: 0 20px 20px; gap: 12px; scrollbar-width: none; }
         .scroll-list::-webkit-scrollbar { display: none; }
         
-        /* الكروت المحسنة */
+        /* الكروت */
         .card { min-width: 110px; width: 110px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
         .card:active { transform: scale(0.92); }
         .card img { 
@@ -55,7 +55,7 @@
         }
         .card-badge { position: absolute; top: 6px; left: 6px; background: var(--accent); color: white; font-size: 10px; padding: 3px 6px; border-radius: 3px; font-weight: 900; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* === 2. الصفحات والطبقات === */
+        /* === 2. الصفحات والمشغل === */
         #details-page, #player-overlay { display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 200; }
         
         /* تفاصيل المسلسل */
@@ -70,14 +70,17 @@
         .d-desc { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 20px; }
         .btn-channel { background: #333; color: white; width: 100%; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* الحلقات */
+        /* شبكة الحلقات */
         .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 10px; margin-bottom: 50px; }
         .ep-box { background: #222; aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; color: #666; border: 1px solid #333; cursor: default; }
         .ep-box.active { background: var(--accent); color: white; border-color: var(--accent); cursor: pointer; box-shadow: 0 4px 10px rgba(229, 9, 20, 0.3); }
 
-        /* المشغل */
-        #player-overlay { background: black; z-index: 300; flex-direction: column; justify-content: center; }
-        .player-close { position: absolute; top: 20px; right: 20px; color: white; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; z-index: 301; font-size: 12px; }
+        /* منطقة المشغل (معدلة للحجب) */
+        #player-overlay { background: black; z-index: 300; display: none; flex-direction: column; }
+        .player-header { padding: 15px; display: flex; justify-content: flex-end; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; top: 0; width: 100%; z-index: 302; box-sizing: border-box; }
+        .player-close { color: white; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 30px; border: none; cursor: pointer; font-size: 12px; backdrop-filter: blur(5px); }
+        
+        .iframe-container { width: 100%; height: 100%; position: relative; }
         iframe { width: 100%; height: 100%; border: none; }
 
     </style>
@@ -88,7 +91,6 @@
         <div class="logo">SHNX</div>
         <div class="header-icons">
             <button class="icon-btn" onclick="tg.openTelegramLink('https://t.me/SHNX26')">📢</button>
-            <button class="icon-btn" onclick="tg.openTelegramLink('https://t.me/DII1Il')">💬</button>
         </div>
     </header>
 
@@ -129,8 +131,16 @@
     </div>
 
     <div id="player-overlay">
-        <button class="player-close" onclick="closePlayer()">عودة للقائمة ✕</button>
-        <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
+        <div class="player-header">
+            <button class="player-close" onclick="closePlayer()">عودة للقائمة ✕</button>
+        </div>
+        <div class="iframe-container">
+            <iframe id="video-frame" src="" 
+                allowfullscreen 
+                allow="autoplay; encrypted-media; picture-in-picture"
+                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation">
+            </iframe>
+        </div>
     </div>
 
     <script>
@@ -139,41 +149,33 @@
         tg.setHeaderColor('#000000');
 
         // ============================================
-        // 1. قاعدة البيانات (تم تصحيح الروابط)
+        // 1. قاعدة البيانات (تم التصحيح)
         // ============================================
         const seriesDB = [ 
-            // الأكثر مشاهدة (Trending)
             { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية والقضايا الاجتماعية بطرح جريء ومختلف." },
+            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى." },
+            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي." },
+            { name: "كحيلان", cat: "trending", img: "https://i.postimg.cc/NfZXGXwB/20260216-144848.jpg", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان." },
+            { name: "يوميات رجل متزوج", cat: "trending", img: "https://i.postimg.cc/gjYCZr94/ca44856a-bf4d-4ac9-8014-85e9e2e35a12.jpg", desc: "كوميديا خفيفة ترصد المعاناة اليومية." },
             
-            // تم تصحيح الخطأ هنا (حذف علامة التنصيص الزائدة)
-            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
-            
-            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
-            
-            // تنبيه: الروابط أدناه مؤقتة لأن روابط google لا تعمل كصور مباشرة
-            { name: "كحيلان", cat: "trending", img: "https://i.postimg.cc/NfZXGXwB/20260216-144848.jpg", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
-            { name: "يوميات رجل متزوج", cat: "trending", img: "https://i.postimg.cc/gjYCZr94/ca44856a-bf4d-4ac9-8014-85e9e2e35a12.jpg", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
-            
-            // كوميديا
             { name: "رامز ليڤل", cat: "comedy", img: "https://i.postimg.cc/7Pj7wR7y/Picsart-26-02-16-15-20-13-051.jpg", desc: "مقالب رامز جلال تصل لمستوى جديد." },
             { name: "عايله مايله", cat: "comedy", img: "https://i.postimg.cc/bwx16RsB/20260216-152905.jpg", desc: "عائلة غريبة الأطوار تواجه مشاكل الحياة." },
 
-            // دراما
             { name: "غلط بنات", cat: "drama", img: "https://i.postimg.cc/sxWJ3CgW/20260216-153050.jpg", desc: "قصص اجتماعية واقعية." },
             { name: "بنات عبدالغني", cat: "drama", img: "https://i.postimg.cc/x8FXbCjh/20260216-165829.jpg", desc: "صراع الإرث والسلطة." },
             { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
         ];
 
         // ============================================
-        // 2. جدول الروابط
+        // 2. الروابط (تم دمج رابط SeekPlayer الجديد)
         // ============================================
         const linksDB = {
             "شباب البومب 14": {
-                1: "https://vkvideo.ru/video_ext.php?oid=791768803&id=456260752&hash=ec5473ebc5345dd6&hd=2",
-                2: "", 
+                // هذا هو الرابط الجديد اللي استخرجناه
+                1: "https://shnx.seekplayer.me/#xibb5",
             },
             "شارع الأعشى 2": { 1: "" },
-            "كحيلان": { 1: "https://www.google.com" }
+            "كحيلان": { 1: "" }
         };
 
         // ============================================
@@ -183,13 +185,13 @@
             seriesDB.forEach(s => {
                 let listId = s.cat === "trending" ? "list-trending" : (s.cat === "comedy" ? "list-comedy" : "list-drama");
                 let container = document.getElementById(listId);
-                if(!container) return; // حماية من الأخطاء
+                if(!container) return; 
                 
                 let card = document.createElement('div');
                 card.className = "card";
                 card.onclick = () => openDetails(s.name);
                 let badge = s.cat === "trending" ? '<div class="card-badge">TOP 10</div>' : '';
-                card.innerHTML = `${badge}<img src="${s.img}" alt="${s.name}" onerror="this.src='https://placehold.co/300x450?text=Error'">`;
+                card.innerHTML = `${badge}<img src="${s.img}" alt="${s.name}" onerror="this.src='https://placehold.co/110x165?text=Image'">`;
                 container.appendChild(card);
             });
         }
@@ -230,7 +232,8 @@
         }
 
         function openPlayer(url) {
-            document.getElementById('video-frame').src = url;
+            let frame = document.getElementById('video-frame');
+            frame.src = url; 
             document.getElementById('player-overlay').style.display = 'flex';
         }
 
@@ -243,4 +246,3 @@
     </script>
 </body>
 </html>
-
