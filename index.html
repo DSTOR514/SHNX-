@@ -135,13 +135,18 @@
             <button class="player-close" onclick="closePlayer()">عودة للقائمة ✕</button>
         </div>
         <div class="iframe-container">
+            <div style="text-align: center; padding: 5px; background: #E50914; font-size: 11px; font-weight: bold; color: white;">
+                إذا ظهر إعلان منبثق، اضغط زر "الرجوع" في جوالك فوراً
+            </div>
+            
             <iframe id="video-frame" src="" 
                 allowfullscreen 
                 allow="autoplay; encrypted-media; picture-in-picture"
-                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation">
+                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
     </div>
+
 
     <script>
         const tg = window.Telegram.WebApp;
