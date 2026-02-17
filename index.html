@@ -120,12 +120,12 @@
     </header>
 
     <div id="home-view" class="fade-in">
-        <div class="hero">
-            <div class="hero-content">
-                <h1 style="font-size: 38px; margin: 0 0 10px;">شباب البومب 14</h1>
-                <p style="color: var(--text-sec); margin-bottom: 20px;">كوميدي • رمضان 2026 • حصري</p>
-                <button class="btn-play-hero" onclick="openDetails('شباب البومب 14')">▶ عرض الحلقات</button>
-            </div>
+        <div class="hero" id="main-hero">
+    <div class="hero-content">
+        <h1 id="hero-title" style="font-size: 38px; margin: 0 0 10px;"></h1>
+        <p id="hero-desc" style="color: var(--text-sec); margin-bottom: 20px;"></p>
+        <button class="btn-play-hero" id="hero-btn">▶ مشاهدة الحلقات</button>
+    </div>
         </div>
 
         <div class="section-title">الأكثر مشاهدة 🔥</div>
@@ -171,6 +171,16 @@
             { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
         ];
 
+function setupHero() {
+    const heroSeries = seriesDB.find(s => s.name === "شارع الأعشى 2");
+    if (!heroSeries) return;
+
+    document.getElementById('main-hero').style.backgroundImage = `url('${heroSeries.img}')`;
+    document.getElementById('hero-title').innerText = heroSeries.name;
+    document.getElementById('hero-desc').innerText = heroSeries.desc;
+    document.getElementById('hero-btn').onclick = () => openDetails(heroSeries.name);
+}
+        
         const linksDB = {
             "شباب البومب 14": { 1: "https://ok.ru/videoembed/11815522078977?nochat=1" },
             "كحيلان": { 1: "https://www.google.com" }
@@ -251,4 +261,4 @@
     </script>
 </body>
 </html>
-
+setupHero();
