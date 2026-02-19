@@ -28,11 +28,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* حركات الانتقال */
         .fade-in { animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* الهيدر المطور */
         header { 
             position: fixed; top: 0; width: 100%; height: 70px; z-index: 1000; 
             background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); 
@@ -41,10 +39,9 @@
         }
         .logo { font-size: 28px; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
 
-        /* البانر الرئيسي - المنظر الرهيب */
         .hero { 
-    height: 75vh; position: relative; 
-    background-image: url('https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg'); 
+            height: 75vh; position: relative; 
+            background-image: url('https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg'); 
             background-size: cover; background-position: center top; 
             display: flex; align-items: flex-end; 
         }
@@ -60,56 +57,30 @@
         }
         .btn-play-hero:active { transform: scale(0.95); opacity: 0.8; }
 
-        /* القوائم */
         .section-title { font-size: 19px; font-weight: 800; margin: 25px 5% 15px; border-right: 4px solid var(--accent); padding-right: 12px; }
         .scroll-list { display: flex; overflow-x: auto; padding: 0 5% 30px; gap: 15px; scrollbar-width: none; }
         .scroll-list::-webkit-scrollbar { display: none; }
         
-        .card { 
-            min-width: 130px; transition: var(--transition); position: relative; 
-        }
+        .card { min-width: 130px; transition: var(--transition); position: relative; }
         .card:active { transform: scale(0.92); }
         .card img { width: 100%; height: 190px; border-radius: 6px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
 
-        /* صفحة التفاصيل المحدثة */
-        #details-page { 
-            display: none; position: fixed; inset: 0; z-index: 2000; 
-            background: var(--bg); overflow-y: auto; 
-        }
-
-        #video-container { 
-            display: none; width: 100%; aspect-ratio: 16/9; 
-            background: #000; position: sticky; top: 0; z-index: 2100;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
-        }
+        #details-page { display: none; position: fixed; inset: 0; z-index: 2000; background: var(--bg); overflow-y: auto; }
+        #video-container { display: none; width: 100%; aspect-ratio: 16/9; background: #000; position: sticky; top: 0; z-index: 2100; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
         #video-container iframe { width: 100%; height: 100%; border: none; }
 
         .details-hero { height: 50vh; background-size: cover; background-position: center; position: relative; }
         .details-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); }
 
-        .close-btn { 
-            position: fixed; top: 20px; right: 20px; z-index: 2200;
-            background: rgba(0,0,0,0.5); color: white; border: none; 
-            width: 40px; height: 40px; border-radius: 50%; font-size: 20px; 
-            backdrop-filter: blur(10px);
-        }
+        .close-btn { position: fixed; top: 20px; right: 20px; z-index: 2200; background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; backdrop-filter: blur(10px); }
 
         .details-info { padding: 0 5%; transition: var(--transition); transform: translateY(-60px); }
         .details-info.video-mode { transform: translateY(10px); }
 
-        /* ستايل الحلقات */
-        .ep-item { 
-            display: flex; align-items: center; background: #1a1a1a; 
-            padding: 15px; border-radius: 10px; margin-bottom: 12px; 
-            gap: 15px; border: 1px solid #222; transition: var(--transition);
-        }
+        .ep-item { display: flex; align-items: center; background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 12px; gap: 15px; border: 1px solid #222; transition: var(--transition); }
         .ep-item:active { background: #252525; transform: translateX(-5px); }
         .ep-item.active { border-color: var(--accent); background: rgba(229, 9, 20, 0.1); }
-        .ep-number { 
-            width: 40px; height: 40px; background: #333; 
-            border-radius: 8px; display: flex; align-items: center; 
-            justify-content: center; font-weight: 900; 
-        }
+        .ep-number { width: 40px; height: 40px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
         .active .ep-number { background: var(--accent); }
     </style>
 </head>
@@ -120,12 +91,12 @@
     </header>
 
     <div id="home-view" class="fade-in">
-        <div class="hero" style="background-image: url('https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg');">
-    <div class="hero-content">
-        <h1 style="font-size: 38px; margin: 0 0 10px;">شارع الأعشى 2</h1>
-        <p style="color: var(--text-sec); margin-bottom: 20px;">دراما • رمضان 2026 • حصري</p>
-        <button class="btn-play-hero" onclick="openDetails('شارع الأعشى 2')">▶ مشاهدة الحلقات</button>
-    </div>
+        <div class="hero">
+            <div class="hero-content">
+                <h1 style="font-size: 38px; margin: 0 0 10px;">شارع الأعشى 2</h1>
+                <p style="color: var(--text-sec); margin-bottom: 20px;">دراما • رمضان 2026 • حصري</p>
+                <button class="btn-play-hero" onclick="openDetails('شارع الأعشى 2')">▶ مشاهدة الحلقات</button>
+            </div>
         </div>
 
         <div class="section-title">الأكثر مشاهدة 🔥</div>
@@ -140,41 +111,104 @@
 
     <div id="details-page">
         <button class="close-btn" onclick="closeDetails()">✕</button>
-        
         <div id="video-container">
             <iframe id="video-frame" src="" allowfullscreen allow="autoplay; fullscreen"></iframe>
         </div>
-
         <div class="details-hero" id="d-hero"></div>
-
         <div class="details-info" id="d-info-box">
             <h1 class="d-title" id="d-title" style="font-size: 32px; margin: 0 0 10px;"></h1>
             <p class="d-desc" id="d-desc" style="color: var(--text-sec); line-height: 1.6; margin-bottom: 30px;"></p>
-            
             <h3 style="margin-bottom: 20px; border-right: 3px solid var(--accent); padding-right: 10px;">قائمة الحلقات</h3>
             <div id="d-episodes-list"></div>
         </div>
     </div>
 
     <script>
-        // داتا المسلسلات (لم أغير فيها شيئاً بناءً على طلبك)
         const seriesDB = [ 
-            { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية والقضايا الاجتماعية بطرح جريء ومختلف." },
-            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى، صراعات جديدة وأسرار تنكشف لأول مرة." },
-            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي، مواقف طريفة تعكس واقع العائلة السعودية." },
-            { name: "كحيلان", cat: "trending", img: "https://i.postimg.cc/NfZXGXwB/20260216-144848.jpg", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان وصراعه لاسترداد حق قبيلته المسلوب." },
-            { name: "يوميات رجل متزوج", cat: "trending", img: "https://i.postimg.cc/gjYCZr94/ca44856a-bf4d-4ac9-8014-85e9e2e35a12.jpg", desc: "كوميديا خفيفة ترصد المعاناة اليومية والمواقف المضحكة لزوج يحاول إرضاء الجميع." },
+            { name: "شارع الأعشى 2", cat: "trending", img: "https://i.ibb.co/hJTvQBRJ/20260216-133106.jpg", desc: "بعد نجاح الجزء الأول، تستمر الحكايات في أزقة شارع الأعشى." },
+            { name: "شباب البومب 14", cat: "trending", img: "https://i.ibb.co/kbvczQp/20260216-123144.jpg", desc: "يعود عامر والعيال في موسم جديد مليء بالمواقف الكوميدية." },
+            { name: "جاك العلم 3", cat: "trending", img: "https://i.ibb.co/KxnpLcmd/76ca87a1-5326-42e9-9af4-39592736f2f6.jpg", desc: "أبو صامل وأم صامل في مغامرات يومية لا تنتهي." },
+            { name: "كحيلان", cat: "trending", img: "https://i.postimg.cc/NfZXGXwB/20260216-144848.jpg", desc: "ملحمة بدوية درامية تحكي قصة الفارس كحيلان." },
+            { name: "يوميات رجل متزوج", cat: "trending", img: "https://i.postimg.cc/gjYCZr94/ca44856a-bf4d-4ac9-8014-85e9e2e35a12.jpg", desc: "كوميديا خفيفة ترصد المعاناة اليومية لزوج." },
+            { name: "الأم المتوحشة", cat: "trending", img: "https://placehold.co/300x450?text=الأم+المتوحشة", desc: "دراما اجتماعية قوية." },
             { name: "رامز ليڤل", cat: "comedy", img: "https://i.postimg.cc/7Pj7wR7y/Picsart-26-02-16-15-20-13-051.jpg", desc: "مقالب رامز جلال تصل لمستوى جديد." },
             { name: "عايله مايله", cat: "comedy", img: "https://i.postimg.cc/bwx16RsB/20260216-152905.jpg", desc: "عائلة غريبة الأطوار تواجه مشاكل الحياة." },
+            { name: "حي الجراديه", cat: "comedy", img: "https://placehold.co/300x450?text=حي+الجراديه", desc: "قصص من قلب الحي القديم." },
             { name: "غلط بنات", cat: "drama", img: "https://i.postimg.cc/sxWJ3CgW/20260216-153050.jpg", desc: "قصص اجتماعية واقعية." },
             { name: "بنات عبدالغني", cat: "drama", img: "https://i.postimg.cc/x8FXbCjh/20260216-165829.jpg", desc: "صراع الإرث والسلطة." },
-            { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." }
+            { name: "الغميضه", cat: "drama", img: "https://i.postimg.cc/CL7WVqPm/images-2.jpg", desc: "جريمة غامضة تقلب حياة قرية هادئة." },
+            { name: "عرس الجن", cat: "drama", img: "https://placehold.co/300x450?text=عرس+الجن", desc: "غموض وتشويق." }
         ];
 
-        const linksDB = {
-            "شباب البومب 14": { 1: "https://ok.ru/videoembed/11815522078977?nochat=1" },
-            "كحيلان": { 1: "https://www.google.com" }
+        // قسم الروابط - ضيف الرابط بين القوسين ""
+                const linksDB = {
+            "شارع الأعشى 2": {
+                1: "//ok.ru/videoembed/11875516092673?nochat=1", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "شباب البومب 14": {
+                1: "https://ok.ru/videoembed/11815522078977?nochat=1", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "جاك العلم 3": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "كحيلان": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "يوميات رجل متزوج": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "رامز ليڤل": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "عايله مايله": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "غلط بنات": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "بنات عبدالغني": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "الغميضه": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "الأم المتوحشة": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "عرس الجن": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            },
+            "حي الجراديه": {
+                1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "",
+                11: "", 12: "", 13: "", 14: "", 15: "", 16: "", 17: "", 18: "", 19: "", 20: "",
+                21: "", 22: "", 23: "", 24: "", 25: "", 26: "", 27: "", 28: "", 29: "", 30: ""
+            }
         };
+
 
         function renderHome() {
             seriesDB.forEach(s => {
@@ -191,18 +225,13 @@
         function openDetails(name) {
             const data = seriesDB.find(s => s.name === name);
             const page = document.getElementById('details-page');
-            
             document.getElementById('d-title').innerText = data.name;
             document.getElementById('d-desc').innerText = data.desc;
             document.getElementById('d-hero').style.backgroundImage = `url('${data.img}')`;
-            
-            // تهيئة الصفحة
             document.getElementById('video-container').style.display = 'none';
             document.getElementById('d-hero').style.display = 'block';
             document.getElementById('d-info-box').classList.remove('video-mode');
-            
             renderEpisodes(name);
-
             page.style.display = 'block';
             page.classList.add('fade-in');
             document.body.style.overflow = 'hidden';
@@ -234,10 +263,8 @@
             container.style.display = 'block';
             document.getElementById('video-frame').src = url;
             document.getElementById('d-info-box').classList.add('video-mode');
-            
             document.querySelectorAll('.ep-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            
             document.getElementById('details-page').scrollTo({top: 0, behavior: 'smooth'});
         }
 
@@ -251,4 +278,3 @@
     </script>
 </body>
 </html>
-setupHero();
